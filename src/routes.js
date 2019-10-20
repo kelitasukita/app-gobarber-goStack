@@ -1,9 +1,18 @@
 import { Router } from 'express';
-import user from './app/models/user';
-import controllerUsuario from './app/controllers/controllerUsuario';
+import User from './app/models/user';
+
+import UsuarioController from './app/controllers/UsuarioController';
+import SessionController from './app/controllers/SessionController';
+
+import authMiddleware from './app/middlewares/auth';
 
 const rotas = new Router();
 
-rotas.post('/users', controllerUsuario.store);
+rotas.post('/users', UsuarioController.store);
+rotas.post('/sessions', SessionController.store);
+
+rotas.use(authMiddleware);
+
+rotas.put('/users', UsuarioController.update);
 
 export default rotas;
