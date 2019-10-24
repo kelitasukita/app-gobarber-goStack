@@ -9,7 +9,6 @@ const models = [User];
 class Database {
   constructor() {
     this.init();
-
   }
 
   init() {

@@ -1,4 +1,5 @@
 import express from 'express';
+
 import rotas from './routes';
 import './database';
 
@@ -17,7 +18,6 @@ class App {
   minhasRotas() {
     this.servidor.use(rotas);
   }
-
 }
 
 export default new App().servidor;
