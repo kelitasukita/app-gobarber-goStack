@@ -13,7 +13,8 @@
     "jsonwebtoken": "^8.5.1",
     "pg": "^7.12.1",
     "pg-hstore": "^2.3.3",
-    "sequelize": "^5.21.0"
+    "sequelize": "^5.21.0",
+    "yup": "^0.27.0"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^2.4.0",
@@ -26,6 +27,7 @@
     "nodemon": "^1.19.4",
     "prettier": "^1.18.2",
     "sequelize-cli": "^5.5.1",
-    "sucrase": "^3.10.1"
+    "sucrase": "^3.10.1",
+    "typescript": "^3.6.4"
   }
 }

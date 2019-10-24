@@ -3,11 +3,10 @@ import { promisify } from 'util';
 
 import authConfig from '../../config/auth';
 
-
 export default async (req, res, next) => {
   const autorizacaoHeader = req.headers.authorization;
 
-  if(!autorizacaoHeader) {
+  if (!autorizacaoHeader) {
     return res.status(401).json({ error: 'Usuário não autorizado' });
   }
 
@@ -22,5 +21,4 @@ export default async (req, res, next) => {
   } catch (erro) {
     return res.status(401).json({ error: 'Token inválido' });
   }
-
 };
