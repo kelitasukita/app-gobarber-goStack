@@ -4,6 +4,7 @@ import multer from 'multer';
 import multerConfig from './config/multer';
 import UsuarioController from './app/controllers/UsuarioController';
 import SessionController from './app/controllers/SessionController';
+import FileController from './app/controllers/FileController';
 
 import authMiddleware from './app/middlewares/auth';
 
@@ -17,8 +18,6 @@ rotas.use(authMiddleware);
 
 rotas.put('/users', UsuarioController.update);
 
-rotas.post('/files', upload.single('file'), (req, res) => {
-  return res.json({ ok: true });
-});
+rotas.post('/files', upload.single('file'), FileController.store);
 
 export default rotas;
