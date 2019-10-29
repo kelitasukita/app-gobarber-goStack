@@ -6,6 +6,7 @@ import UsuarioController from './app/controllers/UsuarioController';
 import SessionController from './app/controllers/SessionController';
 import FileController from './app/controllers/FileController';
 import ProviderController from './app/controllers/ProviderController';
+import AppointmentController from './app/controllers/AppointmentController';
 
 import authMiddleware from './app/middlewares/auth';
 
@@ -20,6 +21,8 @@ rotas.use(authMiddleware);
 rotas.put('/users', UsuarioController.update);
 
 rotas.get('/providers', ProviderController.index);
+
+rotas.post('/appointments', AppointmentController.store);
 
 rotas.post('/files', upload.single('file'), FileController.store);
 
