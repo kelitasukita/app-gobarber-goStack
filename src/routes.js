@@ -5,6 +5,7 @@ import multerConfig from './config/multer';
 import UsuarioController from './app/controllers/UsuarioController';
 import SessionController from './app/controllers/SessionController';
 import FileController from './app/controllers/FileController';
+import ProviderController from './app/controllers/ProviderController';
 
 import authMiddleware from './app/middlewares/auth';
 
@@ -17,6 +18,8 @@ rotas.post('/sessions', SessionController.store);
 rotas.use(authMiddleware);
 
 rotas.put('/users', UsuarioController.update);
+
+rotas.get('/providers', ProviderController.index);
 
 rotas.post('/files', upload.single('file'), FileController.store);
 

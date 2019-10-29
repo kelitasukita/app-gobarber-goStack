@@ -1,4 +1,5 @@
 import express from 'express';
+import path from 'path';
 
 import rotas from './routes';
 import './database';
@@ -13,6 +14,10 @@ class App {
 
   middlewares() {
     this.servidor.use(express.json());
+    this.servidor.use(
+      '/files',
+      express.static(path.resolve(__dirname, '..', 'temp', 'uploads'))
+    );
   }
 
   minhasRotas() {
