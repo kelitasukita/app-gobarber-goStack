@@ -22,6 +22,7 @@ rotas.put('/users', UsuarioController.update);
 
 rotas.get('/providers', ProviderController.index);
 
+rotas.get('/appointments', AppointmentController.index);
 rotas.post('/appointments', AppointmentController.store);
 
 rotas.post('/files', upload.single('file'), FileController.store);
