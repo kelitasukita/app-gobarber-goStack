@@ -8,6 +8,7 @@ import FileController from './app/controllers/FileController';
 import ProviderController from './app/controllers/ProviderController';
 import AppointmentController from './app/controllers/AppointmentController';
 import ScheduleController from './app/controllers/ScheduleController';
+import NotificationController from './app/controllers/NotificationController';
 
 import authMiddleware from './app/middlewares/auth';
 
@@ -27,6 +28,8 @@ rotas.get('/appointments', AppointmentController.index);
 rotas.post('/appointments', AppointmentController.store);
 
 rotas.get('/schedule', ScheduleController.index);
+
+rotas.get('/notifications', NotificationController.index);
 
 rotas.post('/files', upload.single('file'), FileController.store);
 
