@@ -26,6 +26,7 @@ rotas.get('/providers', ProviderController.index);
 
 rotas.get('/appointments', AppointmentController.index);
 rotas.post('/appointments', AppointmentController.store);
+rotas.delete('/appointments/:id', AppointmentController.delete);
 
 rotas.get('/schedule', ScheduleController.index);
 
