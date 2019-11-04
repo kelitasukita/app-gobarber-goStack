@@ -16,10 +16,21 @@ class NotificationController {
     const notifications = await Notification.find({
       user: req.idUsuario
     })
-      .sort('createdAt')
+      .sort({ createdAt: 'desc' })
       .limit(20);
 
     return res.json(notifications);
   }
+
+  async update(req, res) {
+    const notification = await Notification.findByIdAndUpdate(
+      req.params.id,
+      { read: true },
+      { new: true } // Esse campo retorna a notificação já atualizada como lida
+    );
+
+    return res.json(notification);
+  }
 }
+
 export default new NotificationController();

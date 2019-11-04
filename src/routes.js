@@ -30,6 +30,7 @@ rotas.post('/appointments', AppointmentController.store);
 rotas.get('/schedule', ScheduleController.index);
 
 rotas.get('/notifications', NotificationController.index);
+rotas.put('/notifications/:id', NotificationController.update);
 
 rotas.post('/files', upload.single('file'), FileController.store);
 
