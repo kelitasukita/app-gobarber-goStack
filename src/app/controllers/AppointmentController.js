@@ -48,6 +48,10 @@ class AppointmentController {
 
     /* Check se o id informado é de um provedor de serviços */
 
+    if (req.idUsuario === provider_id) {
+      return res.status(401).json({ error: 'Não permitido autoagendamento' });
+    }
+
     const checkIsProvider = await User.findOne({
       where: { id: provider_id, provider: true }
     });
