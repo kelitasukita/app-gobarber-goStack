@@ -9,6 +9,7 @@ import ProviderController from './app/controllers/ProviderController';
 import AppointmentController from './app/controllers/AppointmentController';
 import ScheduleController from './app/controllers/ScheduleController';
 import NotificationController from './app/controllers/NotificationController';
+import AvailableController from './app/controllers/AvailableController';
 
 import authMiddleware from './app/middlewares/auth';
 
@@ -23,6 +24,7 @@ rotas.use(authMiddleware);
 rotas.put('/users', UsuarioController.update);
 
 rotas.get('/providers', ProviderController.index);
+rotas.get('/providers/:providerId/available', AvailableController.index);
 
 rotas.get('/appointments', AppointmentController.index);
 rotas.post('/appointments', AppointmentController.store);
