@@ -1,3 +1,5 @@
+import 'dotenv/config';
+
 import express from 'express';
 import path from 'path';
 import * as Sentry from '@sentry/node';
@@ -36,10 +38,14 @@ class App {
   exceptionHandler() {
     // Middleware de tratamentos de exceção
     this.servidor.use(async (err, req, res, next) => {
-      // Qdo se recebe 4 paramentros no middleware o express automaticamente                                                         entende que se trata de um middleware de tratamentos de exceções.
-      const errors = await new Youch(err, req).toJSON(); // o Youch vai mostrar o erro, na linguagem que eu definir, de uma forma melhor para o programador.
+      if (process.env.NODE_ENV === 'development') {
+        // Qdo se recebe 4 paramentros no middleware o express automaticamente                                                         entende que se trata de um middleware de tratamentos de exceções.
+        const errors = await new Youch(err, req).toJSON(); // o Youch vai mostrar o erro, na linguagem que eu definir, de uma forma melhor para o programador.
 
-      return res.status(500).json(errors);
+        return res.status(500).json(errors);
+      }
+
+      return res.status(500).json({ error: 'Internal server error' });
     });
   }
 }
