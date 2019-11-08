@@ -1,9 +1,14 @@
 import * as Yup from 'yup';
-import { startOfHour, parseISO, isBefore } from 'date-fns';
+import { startOfHour, parseISO, isBefore, format, subHours } from 'date-fns';
+import pt from 'date-fns/locale/pt';
 
 import User from '../models/User';
 import File from '../models/File';
 import Appointment from '../models/Appointment';
+import Notification from '../schemas/Notification';
+
+import Queue from '../../lib/Queue';
+import CancellationMail from '../jobs/CancellationMail';
 
 class AppointmentController {
   async index(req, res) {
@@ -12,7 +17,7 @@ class AppointmentController {
     const appointmentList = await Appointment.findAll({
       where: { user_id: req.idUsuario, canceled_at: null },
       order: ['date'],
-      attributes: ['id', 'date'],
+      attributes: ['id', 'date', 'past', 'cancelable'],
       limit: 20,
       offset: (page - 1) * 20,
       include: {
@@ -45,6 +50,10 @@ class AppointmentController {
     const { provider_id, date } = req.body;
 
     /* Check se o id informado é de um provedor de serviços */
+
+    if (req.idUsuario === provider_id) {
+      return res.status(401).json({ error: 'Não permitido autoagendamento' });
+    }
 
     const checkIsProvider = await User.findOne({
       where: { id: provider_id, provider: true }
@@ -90,6 +99,61 @@ class AppointmentController {
       user_id: req.idUsuario, // Esse idUsuário vem do meu middleware de autenticação
       provider_id,
       date: hourStart
+    });
+
+    /*
+      Notificar provedor de serviços sobre seus agendamentos
+    */
+    const user = await User.findByPk(req.idUsuario);
+    const formatedDate = format(hourStart, "'dia' dd 'de' MMMM', às' H:mm'h'", {
+      locale: pt
+    });
+
+    await Notification.create({
+      content: `Novo agendamento de ${user.name} para o ${formatedDate}`,
+      user: provider_id
+    });
+
+    return res.json(appointment);
+  }
+
+  async delete(req, res) {
+    const appointment = await Appointment.findByPk(req.params.id, {
+      include: [
+        {
+          model: User,
+          as: 'provider',
+          attributes: ['name', 'email']
+        },
+        {
+          model: User,
+          as: 'user',
+          attributes: ['name']
+        }
+      ]
+    });
+
+    if (appointment.user_id !== req.idUsuario) {
+      return res.status(401).json({
+        error: 'Você não tem permissão para cancelar esse agengamento'
+      });
+    }
+
+    const dataLimite = subHours(appointment.date, 2);
+
+    if (isBefore(dataLimite, new Date())) {
+      return res.status(401).json({
+        error:
+          'Cancelamento de agendamento permitido com no mínimo 2 horas de antecedência'
+      });
+    }
+
+    appointment.canceled_at = new Date();
+
+    await appointment.save();
+
+    await Queue.add(CancellationMail.key, {
+      appointment
     });
 
     return res.json(appointment);

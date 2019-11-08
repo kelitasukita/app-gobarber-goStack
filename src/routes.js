@@ -8,6 +8,8 @@ import FileController from './app/controllers/FileController';
 import ProviderController from './app/controllers/ProviderController';
 import AppointmentController from './app/controllers/AppointmentController';
 import ScheduleController from './app/controllers/ScheduleController';
+import NotificationController from './app/controllers/NotificationController';
+import AvailableController from './app/controllers/AvailableController';
 
 import authMiddleware from './app/middlewares/auth';
 
@@ -22,11 +24,16 @@ rotas.use(authMiddleware);
 rotas.put('/users', UsuarioController.update);
 
 rotas.get('/providers', ProviderController.index);
+rotas.get('/providers/:providerId/available', AvailableController.index);
 
 rotas.get('/appointments', AppointmentController.index);
 rotas.post('/appointments', AppointmentController.store);
+rotas.delete('/appointments/:id', AppointmentController.delete);
 
 rotas.get('/schedule', ScheduleController.index);
+
+rotas.get('/notifications', NotificationController.index);
+rotas.put('/notifications/:id', NotificationController.update);
 
 rotas.post('/files', upload.single('file'), FileController.store);
 
